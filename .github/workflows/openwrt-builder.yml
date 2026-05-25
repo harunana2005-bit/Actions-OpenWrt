@@ -13,8 +13,8 @@
 name: OpenWrt Builder
 
 on:
-  workflow_dispatch:
-    inputs:
+   workflow_dispatch:
+   inputs:
       ssh_enable:
         description: 'Enable SSH connection for make menuconfig'
         required: false
@@ -23,7 +23,6 @@ on:
         description: 'OpenWrt version (branch)'
         required: false
         default: 'openwrt-24.10'
-  workflow_dispatch:
 
 env:
   REPO_URL: https://github.com/openwrt/openwrt
