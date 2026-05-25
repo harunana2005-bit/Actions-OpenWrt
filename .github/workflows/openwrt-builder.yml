@@ -13,7 +13,16 @@
 name: OpenWrt Builder
 
 on:
-  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh_enable:
+        description: 'Enable SSH connection for make menuconfig'
+        required: false
+        default: 'false'
+      version:
+        description: 'OpenWrt version (branch)'
+        required: false
+        default: 'openwrt-24.10'
   workflow_dispatch:
 
 env:
@@ -35,6 +44,30 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@main
+    - name: Install SSH Server
+      if: github.event.inputs.ssh_enable == 'true'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openssh-server
+        sudo systemctl start ssh
+    - name: Generate SSH Connection Info
+      if: github.event.inputs.ssh_enable == 'true'
+      run: |
+        echo "::set-output name=ssh_command::ssh -p 22 runner@$(curl -4s ifconfig.me)"
+        echo "::set-output name=ssh_host::$(curl -4s ifconfig.me)"
+      id: ssh_info
+    - name: Display SSH Connection Info
+      if: github.event.inputs.ssh_enable == 'true'
+      run: |
+        echo "===================================="
+        echo "Connect to this runner using SSH:"
+        echo "${{ steps.ssh_info.outputs.ssh_command }}"
+        echo "===================================="
+    - name: Keep SSH Alive
+      if: github.event.inputs.ssh_enable == 'true'
+      run: |
+        while true; do sleep 300; done
+      
 
     - name: Initialization environment
       env:
