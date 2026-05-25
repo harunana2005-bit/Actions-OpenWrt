@@ -26,7 +26,6 @@ on:
   workflow_dispatch:
 
 env:
-env:
   REPO_URL: https://github.com/openwrt/openwrt
   REPO_BRANCH: openwrt-24.10
   CONFIG_FILE: .config
