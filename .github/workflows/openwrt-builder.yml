@@ -13,8 +13,8 @@
 name: OpenWrt Builder
 
 on:
-   workflow_dispatch:
-   inputs:
+  workflow_dispatch:
+    inputs:
       ssh_enable:
         description: 'Enable SSH connection for make menuconfig'
         required: false
